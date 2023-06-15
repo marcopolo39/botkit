@@ -198,10 +198,20 @@ export class FacebookAdapter extends BotAdapter {
      * @param activity
      */
     private activityToFacebook(activity: any): any {
+
+        const hasThreadKey = activity?.thread
+        const threadKey = activity?.thread?.id
+        const sendToIndividual = {
+            id: activity.conversation.id
+        }
+        const sendToThread = {
+            thread_key: threadKey
+        }
+
+        const recipientObj = hasThreadKey !== undefined ? sendToThread : sendToIndividual
+
         const message = {
-            recipient: {
-                id: activity.conversation.id
-            },
+            recipient: recipientObj,
             message: {
                 text: activity.text,
                 sticker_id: undefined,
