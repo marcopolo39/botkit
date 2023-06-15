@@ -198,7 +198,6 @@ export class FacebookAdapter extends BotAdapter {
      * @param activity
      */
     private activityToFacebook(activity: any): any {
-
         const hasThreadKey = activity?.thread
         const threadKey = activity?.thread?.id
         const sendToIndividual = {
@@ -283,8 +282,11 @@ export class FacebookAdapter extends BotAdapter {
      */
     public async sendActivities(context: TurnContext, activities: Partial<Activity>[]): Promise<ResourceResponse[]> {
         const responses = [];
+        const thread = context.activity.channelData?.thread
         for (let a = 0; a < activities.length; a++) {
             const activity = activities[a];
+            if (thread !== undefined) activity.thread = thread
+            
             if (activity.type === ActivityTypes.Message) {
                 const message = this.activityToFacebook(activity);
                 try {
